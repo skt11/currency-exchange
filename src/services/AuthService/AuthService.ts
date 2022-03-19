@@ -15,7 +15,8 @@ export class AuthService implements IAuthenticator {
     }
 
     authenticateToken(token: string): Either<JWTData, AuthenticationError> {
-        return left({ userId: '1' });
+        const data = jwt.verify(token, this._JWT_SECRET) as JWTData;
+        return left({ userId: data.userId });
     }
 
     createToken(data: JWTData): Either<string, TokenCreationError> {
