@@ -3,6 +3,8 @@ import { AuthService } from './src/services/AuthService/AuthService';
 import { getLoginSchema } from './src/schema/login/schema';
 import { RestCountriesService } from './src/services/RestCountriesService/RestCountriesService';
 import { getCurrencyExchangeSchema } from './src/schema/currencyExchange/schema';
+import { FixerService } from './src/services/FixerService/FixerService';
+import { isLeft } from 'fp-ts/lib/Either';
 
 const authService = new AuthService(
     process.env.JWT_SECRET ? process.env.JWT_SECRET : ''
@@ -12,10 +14,16 @@ const restCountriesService = new RestCountriesService(
     process.env.RESTCOUNTRIES_BASE_URL ? process.env.RESTCOUNTRIES_BASE_URL : ''
 );
 
-restCountriesService
-    .getCountryDetailsByName('peru')
-    .then((r) => console.log(r))
-    .catch((e) => console.log(e));
+const fixerService = new FixerService(
+    process.env.FIXER_BASE_URL ? process.env.FIXER_BASE_URL : '',
+    process.env.FIXER_API_KEY ? process.env.FIXER_API_KEY : ''
+);
+
+fixerService.getExchangeRates(['INR'], ['SEK', 'USD', 'INR']).then((res) => {
+    if (isLeft(res)) {
+        console.log(res.left);
+    }
+});
 
 const server = new Server();
 

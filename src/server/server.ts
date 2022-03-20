@@ -8,6 +8,10 @@ export class Server implements IServer, IGqlServer {
         this._app = express();
     }
 
+    get app() {
+        return this._app;
+    }
+
     start(port: number, callback?: () => void): Server {
         this._app.listen(port, callback);
         return this;
