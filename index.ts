@@ -1,57 +1,31 @@
 import { Server } from './src/server/server';
-
-import { buildSchema } from 'graphql';
 import { AuthService } from './src/services/AuthService/AuthService';
-import { isLeft } from 'fp-ts/lib/Either';
+import { getLoginSchema } from './src/schema/login/schema';
+import { RestCountriesService } from './src/services/RestCountriesService/RestCountriesService';
+import { getCurrencyExchangeSchema } from './src/schema/currencyExchange/schema';
 
 const authService = new AuthService(
     process.env.JWT_SECRET ? process.env.JWT_SECRET : ''
 );
 
+const restCountriesService = new RestCountriesService(
+    process.env.RESTCOUNTRIES_BASE_URL ? process.env.RESTCOUNTRIES_BASE_URL : ''
+);
+
+restCountriesService
+    .getCountryDetailsByName('peru')
+    .then((r) => console.log(r))
+    .catch((e) => console.log(e));
+
 const server = new Server();
 
-console.log(process.env.JWT_SECRET);
-
-// GraphQL schema
-const schema = buildSchema(`
- type Query {
-     message: String
- }
- `);
-const loginSchema = buildSchema(`
- type Query {
-     name: String!
- }
- type Mutation {
-     login(id: String!): String!
- }
- `);
-// Root resolver
-const root = {
-    message: () => 'Hello World!',
-};
-
-const loginResolver = {
-    login: ({ id }: { id: string }) => {
-        console.log(id);
-        const tokenRes = authService.createToken({ userId: id });
-        if (isLeft(tokenRes)) {
-            authService.authenticateToken(tokenRes.left);
-            return tokenRes.left;
-        }
-    },
-    name: () => 'Login',
-};
-
 server
-    .addGraphqlEndpoint('/graphql', {
-        schema: schema,
-        rootValue: root,
+    .addGraphqlEndpoint('/api', {
+        schema: getCurrencyExchangeSchema(),
         graphiql: true,
     })
     .addGraphqlEndpoint('/login', {
-        schema: loginSchema,
-        rootValue: loginResolver,
+        schema: getLoginSchema(authService),
         graphiql: true,
     });
 
