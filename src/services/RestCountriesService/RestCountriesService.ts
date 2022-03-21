@@ -1,6 +1,7 @@
 import { ExternalService, LooseObject } from '../../globalTypes';
-import { IRestCountries } from './types';
+import { IRestCountries, RestCountriesServiceError } from './types';
 import axios from 'axios';
+import { Either, left, right } from 'fp-ts/lib/Either';
 
 export class RestCountriesService
     extends ExternalService
@@ -10,9 +11,14 @@ export class RestCountriesService
         super(BASE_URL);
     }
 
-    async getCountryDetailsByName(name: string): Promise<LooseObject> {
-        const res = await axios.get(this._BASE_URL + '/name/' + name);
-        console.log(res);
-        return res;
+    async getCountryDetailsByName(
+        name: string
+    ): Promise<Either<LooseObject, RestCountriesServiceError>> {
+        try {
+            const res = await axios.get(this._BASE_URL + '/name/' + name);
+            return left(res.data);
+        } catch (e) {
+            return right('Failed to fetch country data.');
+        }
     }
 }

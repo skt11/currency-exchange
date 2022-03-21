@@ -1,6 +1,5 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLSchema } from 'graphql';
-import { AuthService } from '../../services/AuthService/AuthService';
 import { getCurrencyExchangeResolver } from './resolver';
 
 export const getCurrencyExchangeSchema = (): GraphQLSchema =>

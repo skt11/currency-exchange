@@ -11,7 +11,7 @@ export class FixerService extends ExternalService implements IFixerService {
     async getExchangeRate(
         baseCurrency: string,
         targetCurrency: string
-    ): Promise<Either<number, FixerServiceError>> {
+    ): Promise<Either<LooseObject, FixerServiceError>> {
         try {
             const response = await axios.get(this._BASE_URL + '/latest', {
                 params: {

@@ -7,7 +7,7 @@ export interface IFixerService {
     getExchangeRate(
         baseCurrency: string,
         targetCurrency: string
-    ): Promise<Either<number, FixerServiceError>>;
+    ): Promise<Either<LooseObject, FixerServiceError>>;
     getExchangeRates(
         baseCurrencies: string[],
         targetCurrencies: string[]
