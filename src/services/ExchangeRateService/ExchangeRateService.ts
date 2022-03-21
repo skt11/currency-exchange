@@ -1,7 +1,5 @@
 import { Either, isLeft, left, right } from 'fp-ts/lib/Either';
-import { LooseObject } from '../../globalTypes';
 import { FixerService } from '../FixerService/FixerService';
-import { FixerServiceError } from '../FixerService/types';
 import { RestCountriesService } from '../RestCountriesService/RestCountriesService';
 import {
     CountryDetails,
@@ -26,34 +24,34 @@ export class ExchangeRateService implements IExchangeRateService {
         countryName: string,
         targetCurrency: string
     ): Promise<Either<CountryDetails[], ExchangeRateServiceError>> {
-        const countryDetailsResponse =
+        const restCountriesResponse =
             await this._restCountriesService.getCountryDetailsByName(
                 countryName
             );
 
-        if (isLeft(countryDetailsResponse)) {
-            const countryDetailList = countryDetailsResponse.left;
+        if (isLeft(restCountriesResponse)) {
+            const restCountriesList = restCountriesResponse.left;
+            const countryDetailsList: CountryDetails[] = [];
 
-            for (let index in countryDetailList) {
-                const exchangeRatePromiseList = countryDetailList[
-                    index
-                ].currencies
-                    .keys()
-                    .map((curr: string) =>
-                        this._getExchangeRateByEURBase(curr, targetCurrency)
-                    );
+            for (let index in restCountriesList) {
+                const exchangeRatePromiseList = Object.keys(
+                    restCountriesList[index].currencies
+                ).map((curr: string) =>
+                    this._getExchangeRateByEURBase(curr, targetCurrency)
+                );
 
-                const exchangeRatePromiseRes = await Promise.allSettled(
+                const currencyExchangeRates = await Promise.all(
                     exchangeRatePromiseList
                 );
 
-                countryDetailList.currencyExchangeRates =
-                    exchangeRatePromiseRes.map(
-                        (res) => res.status === 'fulfilled' && res.value
-                    );
+                countryDetailsList.push({
+                    fullName: restCountriesList[index].name.official,
+                    population: restCountriesList[index].population,
+                    currencyExchangeRates,
+                });
             }
 
-            return left(countryDetailList as CountryDetails[]);
+            return left(countryDetailsList);
         }
 
         return right('Failed to fetch country data.');
@@ -80,7 +78,7 @@ export class ExchangeRateService implements IExchangeRateService {
                         targetCurrency.toUpperCase()
                     ] /
                     exchangeRateResponseBase.left.rates[
-                        targetCurrency.toUpperCase()
+                        baseCurrency.toUpperCase()
                     ],
             };
         }
