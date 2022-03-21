@@ -1,8 +1,11 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLSchema } from 'graphql';
+import { ExchangeRateService } from '../../services/ExchangeRateService/ExchangeRateService';
 import { getCurrencyExchangeResolver } from './resolver';
 
-export const getCurrencyExchangeSchema = (): GraphQLSchema =>
+export const getCurrencyExchangeSchema = (
+    exchangeRateService: ExchangeRateService
+): GraphQLSchema =>
     makeExecutableSchema({
         typeDefs: `
     type CurrencyExchangeRate{
@@ -16,8 +19,8 @@ export const getCurrencyExchangeSchema = (): GraphQLSchema =>
         currencyExchangeRates: [CurrencyExchangeRate]!
     }
     type Query {
-        countryDetails(name: String!): [CountryDetails]!
+        countryDetails(name: String!, targetCurrency: String!): [CountryDetails]!
     }
  `,
-        resolvers: getCurrencyExchangeResolver(),
+        resolvers: getCurrencyExchangeResolver(exchangeRateService),
     });

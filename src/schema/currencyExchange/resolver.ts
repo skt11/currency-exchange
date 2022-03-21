@@ -1,20 +1,22 @@
-export const getCurrencyExchangeResolver = () => ({
+import { isLeft } from 'fp-ts/lib/Either';
+import { ExchangeRateService } from '../../services/ExchangeRateService/ExchangeRateService';
+
+export const getCurrencyExchangeResolver = (
+    exchangeRateService: ExchangeRateService
+) => ({
     Query: {
-        countryDetails: (_: any, { name }: { name: string }) => {
-            console.log(name);
-            return [
-                {
-                    fullName: name,
-                    population: 1000,
-                    currencyExchangeRates: [
-                        {
-                            currency: 'INR',
-                            rate: 0.8,
-                            targetCurrency: 'USD',
-                        },
-                    ],
-                },
-            ];
+        countryDetails: async (
+            _: any,
+            { name, targetCurrency }: { name: string; targetCurrency: string }
+        ) => {
+            const exchangeRateResponse =
+                await exchangeRateService.getExchangeRatesByCountryName(
+                    name,
+                    targetCurrency
+                );
+            if (isLeft(exchangeRateResponse)) {
+                return exchangeRateResponse.left;
+            }
         },
     },
 });

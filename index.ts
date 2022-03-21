@@ -24,17 +24,11 @@ const exchangeRateService = new ExchangeRateService(
     fixerService
 );
 
-// exchangeRateService.getExchangeRatesByCountryName('peru', 'SEK').then(r => {
-//     if(isLeft(r)){
-//         console.log(r.left[0])
-//     }
-// }).catch(e => console.log(e))
-
 const server = new Server();
 
 server
     .addGraphqlEndpoint('/api', {
-        schema: getCurrencyExchangeSchema(),
+        schema: getCurrencyExchangeSchema(exchangeRateService),
         graphiql: true,
     })
     .addGraphqlEndpoint('/login', {
