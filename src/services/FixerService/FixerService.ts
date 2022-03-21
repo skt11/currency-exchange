@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Either, isLeft, left, right } from 'fp-ts/lib/Either';
+import { Either, left, right } from 'fp-ts/lib/Either';
 import { ExternalService, LooseObject } from '../../globalTypes';
 import { FixerServiceError, IFixerService } from './types';
 
@@ -23,40 +23,6 @@ export class FixerService extends ExternalService implements IFixerService {
             return left(response.data);
         } catch (e) {
             console.log(e);
-            return right('Error while fetching exchange rates.');
-        }
-    }
-
-    async getExchangeRates(
-        baseCurrencies: string[],
-        targetCurrencies: string[]
-    ): Promise<Either<LooseObject, FixerServiceError>> {
-        const targetCurrenciesString = targetCurrencies.join(',');
-
-        const exchangeRatePromises = baseCurrencies.map((currency: string) => {
-            return new Promise(async (resolve, reject) => {
-                const response = await this.getExchangeRate(
-                    currency,
-                    targetCurrenciesString
-                );
-                if (isLeft(response)) {
-                    resolve(response.left);
-                }
-                reject('Failed to fetch rates.');
-            });
-        });
-
-        try {
-            const settledPromises = await Promise.allSettled(
-                exchangeRatePromises
-            );
-            console.log(settledPromises);
-            return left(
-                settledPromises.map((res) =>
-                    res.status === 'fulfilled' ? res.value : 'not found'
-                )
-            );
-        } catch (e) {
             return right('Error while fetching exchange rates.');
         }
     }
