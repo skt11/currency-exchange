@@ -25,6 +25,8 @@ const exchangeRateService = new ExchangeRateService(
     fixerService
 );
 
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+
 const server = new Server();
 
 server
@@ -64,6 +66,6 @@ server
         }
     );
 
-server.start(4000, () => {
-    console.log('Server started at 4000');
+server.start(port, () => {
+    console.log(`Server started at ${port}`);
 });
