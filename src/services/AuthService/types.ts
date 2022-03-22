@@ -11,3 +11,9 @@ export interface IAuthenticator {
     authenticateToken(token: string): Either<JWTData, AuthenticationError>;
     createToken(data: JWTData): Either<string, TokenCreationError>;
 }
+
+export type TokenData = {
+    [userId: string]: {
+        tokenList: string[];
+    };
+};

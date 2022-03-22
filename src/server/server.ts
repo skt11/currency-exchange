@@ -1,5 +1,6 @@
 import express from 'express';
 import { graphqlHTTP, Options } from 'express-graphql';
+import { ExpressMiddlewareFunction } from '../globalTypes';
 import { IGqlServer, IServer } from './types';
 export class Server implements IServer, IGqlServer {
     private _app: express.Application;
@@ -17,8 +18,12 @@ export class Server implements IServer, IGqlServer {
         return this;
     }
 
-    addGraphqlEndpoint(path: string, gqlOptions: Options): Server {
-        this._app.use(path, graphqlHTTP(gqlOptions));
+    addGraphqlEndpoint(
+        path: string,
+        middlewares: any,
+        gqlOptions: Options
+    ): Server {
+        this._app.use(path, middlewares, graphqlHTTP(gqlOptions));
         return this;
     }
 }
