@@ -47,6 +47,21 @@ server
             schema: getCurrencyExchangeSchema(exchangeRateService),
             graphiql: true,
         }
+    )
+    .addGraphqlEndpoint(
+        '/api-open',
+        [
+            rateLimit({
+                windowMs: 60 * 1000, // 1 minutes
+                max: 30, // Limit each IP to 30 requests per minute
+                standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+                legacyHeaders: false,
+            }),
+        ],
+        {
+            schema: getCurrencyExchangeSchema(exchangeRateService),
+            graphiql: true,
+        }
     );
 
 server.start(4000, () => {

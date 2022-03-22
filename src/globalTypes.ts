@@ -1,5 +1,4 @@
 import express from 'express';
-import { JWTData } from './services/AuthService/types';
 
 export abstract class ExternalService {
     protected _API_KEY?: string;

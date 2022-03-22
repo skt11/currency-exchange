@@ -17,6 +17,7 @@ export const getCurrencyExchangeResolver = (
             if (isLeft(exchangeRateResponse)) {
                 return exchangeRateResponse.left;
             }
+            throw new Error(exchangeRateResponse.right);
         },
     },
 });
