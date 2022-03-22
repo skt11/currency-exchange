@@ -11,3 +11,6 @@ coverage
 
 # env files
 .env.*
+
+#build files
+dist
