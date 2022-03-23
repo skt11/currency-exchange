@@ -6,7 +6,7 @@
     > export JWT_SECRET="Super Secret String"\
     > export RESTCOUNTRIES_BASE_URL="https://restcountries.com/v3.1" \
     > export FIXER_API_KEY= \
-    > export FIXER_BASE_URL="http://data.fixer.io/api"\
+    > export FIXER_BASE_URL="http://data.fixer.io/api" \
     > export PORT=4000
 4. Run `npm run start:dev` to run the development server. It will start on port 4000.
 
