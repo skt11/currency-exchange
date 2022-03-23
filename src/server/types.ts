@@ -1,5 +1,4 @@
 import { Options } from 'express-graphql';
-import { ExpressMiddlewareFunction } from '../globalTypes';
 
 export interface IServer {
     start(port: number, callback?: () => void): IServer;
@@ -8,7 +7,7 @@ export interface IServer {
 export interface IGqlServer {
     addGraphqlEndpoint(
         path: string,
-        middlewares: ExpressMiddlewareFunction[],
+        middlewares: any,
         gqlOptions: Options
     ): IGqlServer;
 }

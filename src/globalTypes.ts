@@ -1,5 +1,3 @@
-import express from 'express';
-
 export abstract class ExternalService {
     protected _API_KEY?: string;
     protected _BASE_URL: string;
@@ -13,9 +11,3 @@ export abstract class ExternalService {
 export type LooseObject = {
     [key: string]: any;
 };
-
-export type ExpressMiddlewareFunction = (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-) => void;

@@ -1,6 +1,5 @@
 import express from 'express';
 import { graphqlHTTP, Options } from 'express-graphql';
-import { ExpressMiddlewareFunction } from '../globalTypes';
 import { IGqlServer, IServer } from './types';
 export class Server implements IServer, IGqlServer {
     private _app: express.Application;
