@@ -10,15 +10,13 @@ import { rateLimit } from 'express-rate-limit';
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 //Initialize services
-const authService = new AuthService(
-    process.env.JWT_SECRET ? process.env.JWT_SECRET : ''
-);
+const authService = new AuthService(process.env.JWT_SECRET || '');
 const restCountriesService = new RestCountriesService(
-    process.env.RESTCOUNTRIES_BASE_URL ? process.env.RESTCOUNTRIES_BASE_URL : ''
+    process.env.RESTCOUNTRIES_BASE_URL || ''
 );
 const fixerService = new FixerService(
-    process.env.FIXER_BASE_URL ? process.env.FIXER_BASE_URL : '',
-    process.env.FIXER_API_KEY ? process.env.FIXER_API_KEY : ''
+    process.env.FIXER_BASE_URL || '',
+    process.env.FIXER_API_KEY || ''
 );
 const exchangeRateService = new ExchangeRateService(
     restCountriesService,
