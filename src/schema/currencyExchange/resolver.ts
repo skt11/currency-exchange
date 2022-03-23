@@ -10,11 +10,13 @@ export const getCurrencyExchangeResolver = (
             { name, targetCurrency }: { name: string; targetCurrency: string },
             info: any
         ) => {
+            //Check if rate limit is enabled
             if (info.rateLimit && info.rateLimit.remaining === 0) {
                 throw new Error(
                     `Request limit exceeded, retry at ${info.rateLimit.resetTime}`
                 );
             }
+
             const exchangeRateResponse =
                 await exchangeRateService.getExchangeRatesByCountryName(
                     name,

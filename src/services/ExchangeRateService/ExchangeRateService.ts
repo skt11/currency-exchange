@@ -33,20 +33,22 @@ export class ExchangeRateService implements IExchangeRateService {
             const restCountriesList = restCountriesResponse.left;
             const countryDetailsList: CountryDetails[] = [];
 
+            //Iterate through all the countries returned by this._restCountriesService.getCountryDetailsByName
             for (let index in restCountriesList) {
                 const currencyList = Object.keys(
                     restCountriesList[index].currencies
                 );
 
+                //Execute the fixer service calls in parallel
                 const exchangeRatePromiseList = currencyList.map(
                     (curr: string) =>
                         this._getExchangeRateByEURBase(curr, targetCurrency)
                 );
-
                 const currencyExchangeRates = await Promise.all(
                     exchangeRatePromiseList
                 );
 
+                //Push the desired data for each country to a list
                 countryDetailsList.push({
                     fullName: restCountriesList[index].name.official,
                     population: restCountriesList[index].population,
@@ -60,6 +62,7 @@ export class ExchangeRateService implements IExchangeRateService {
         return right('Failed to fetch country data.');
     }
 
+    // exchangeRate = (targetExchangeRateFromEUR / baseExchangeRateFromEUR)
     private async _getExchangeRateByEURBase(
         baseCurrency: string,
         targetCurrency: string
@@ -78,6 +81,7 @@ export class ExchangeRateService implements IExchangeRateService {
             return {
                 currency: baseCurrency,
                 targetCurrency,
+                // rate = (targetExchangeRateFromEUR / baseExchangeRateFromEUR)
                 rate:
                     exchangeRateResponseTarget.left.rates[
                         targetCurrency.toUpperCase()

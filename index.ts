@@ -9,6 +9,7 @@ import { rateLimit } from 'express-rate-limit';
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
+//Initialize services
 const authService = new AuthService(
     process.env.JWT_SECRET ? process.env.JWT_SECRET : ''
 );
@@ -24,6 +25,7 @@ const exchangeRateService = new ExchangeRateService(
     fixerService
 );
 
+//Init rate limiting
 const rateLimitMiddleware = rateLimit({
     windowMs: process.env.RATE_LIMIT_WINDOW
         ? parseInt(process.env.RATE_LIMIT_WINDOW)
@@ -33,8 +35,8 @@ const rateLimitMiddleware = rateLimit({
     legacyHeaders: false,
 });
 
+//Initialize gql endpoints and start the server.
 const server = new Server();
-
 server
     .addGraphqlEndpoint('/login', [], {
         schema: getLoginSchema(authService),
