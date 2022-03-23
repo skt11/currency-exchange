@@ -7,7 +7,7 @@
         "start": "node ./dist/index.js",
         "build": "tsc",
         "start:dev": "nodemon",
-        "test": "source .env.dev && npx mocha -r ts-node/register --exit --timeout 30000 test/**/*.spec.ts",
+        "test:e2e": "source .env.dev && npx mocha -r ts-node/register --exit --timeout 30000 test/**/*.spec.ts",
         "prepare": "husky install"
     },
     "author": "saikata95@gmail.com",

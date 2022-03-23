@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import supertest from 'supertest';
 
 describe('Currency exchange e2e test', () => {
-    const request = supertest('http://localhost:4000/');
+    const request = supertest(`http://localhost:${process.env.PORT || 4000}/`);
 
     it('User should be able to login and fetch data for india', (done) => {
         request
