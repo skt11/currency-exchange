@@ -5,12 +5,12 @@ import {
     IAuthenticator,
     JWTData,
     TokenCreationError,
-    TokenData,
+    TokenMap,
 } from './types';
 
 export class AuthService implements IAuthenticator {
     private _JWT_SECRET: string;
-    private _tokenMap: TokenData;
+    private _tokenMap: TokenMap;
 
     constructor(JWT_SECRET: string) {
         this._JWT_SECRET = JWT_SECRET;
@@ -57,8 +57,6 @@ export class AuthService implements IAuthenticator {
             const authResponse = this.authenticateToken(
                 jwtToken ? jwtToken : ''
             );
-
-            console.log(authResponse);
 
             if (isLeft(authResponse)) {
                 const userData = authResponse.left;

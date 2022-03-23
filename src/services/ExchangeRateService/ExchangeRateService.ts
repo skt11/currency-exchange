@@ -34,10 +34,13 @@ export class ExchangeRateService implements IExchangeRateService {
             const countryDetailsList: CountryDetails[] = [];
 
             for (let index in restCountriesList) {
-                const exchangeRatePromiseList = Object.keys(
+                const currencyList = Object.keys(
                     restCountriesList[index].currencies
-                ).map((curr: string) =>
-                    this._getExchangeRateByEURBase(curr, targetCurrency)
+                );
+
+                const exchangeRatePromiseList = currencyList.map(
+                    (curr: string) =>
+                        this._getExchangeRateByEURBase(curr, targetCurrency)
                 );
 
                 const currencyExchangeRates = await Promise.all(

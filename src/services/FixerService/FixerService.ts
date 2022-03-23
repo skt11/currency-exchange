@@ -22,7 +22,6 @@ export class FixerService extends ExternalService implements IFixerService {
             });
             return left(response.data);
         } catch (e) {
-            console.log(e);
             return right('Error while fetching exchange rates.');
         }
     }

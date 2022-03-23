@@ -12,7 +12,7 @@ export interface IAuthenticator {
     createToken(data: JWTData): Either<string, TokenCreationError>;
 }
 
-export type TokenData = {
+export type TokenMap = {
     [userId: string]: {
         tokenList: string[];
     };
