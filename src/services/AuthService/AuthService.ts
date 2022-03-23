@@ -53,8 +53,6 @@ export class AuthService implements IAuthenticator {
         return (req: any, res: any, next: any) => {
             const bearerToken = req.headers['authorization'];
 
-            console.log(bearerToken);
-
             if (!!!bearerToken) {
                 return res.sendStatus(403);
             }
