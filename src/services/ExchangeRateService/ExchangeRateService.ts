@@ -71,7 +71,9 @@ export class ExchangeRateService implements IExchangeRateService {
 
         if (
             isLeft(exchangeRateResponseBase) &&
-            isLeft(exchangeRateResponseTarget)
+            exchangeRateResponseBase.left.success &&
+            isLeft(exchangeRateResponseTarget) &&
+            exchangeRateResponseTarget.left.success
         ) {
             return {
                 currency: baseCurrency,
@@ -87,8 +89,8 @@ export class ExchangeRateService implements IExchangeRateService {
         }
         return {
             currency: baseCurrency,
-            targetCurrency,
-            rate: 'Not Found',
+            targetCurrency: 'Invalid',
+            rate: -1,
         };
     }
 }

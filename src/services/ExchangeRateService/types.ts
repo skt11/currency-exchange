@@ -4,7 +4,7 @@ import { RestCountriesServiceError } from '../RestCountriesService/types';
 
 export type CurrencyExchangeRate = {
     currency: string;
-    rate: number | 'Not Found';
+    rate: number;
     targetCurrency: string;
 };
 
